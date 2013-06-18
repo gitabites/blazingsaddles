@@ -5,7 +5,7 @@
 #Step 1: load & process data
 
 #load & store data
-data <- read.csv("guncrime_2011.csv"_
+data <- read.csv("guncrime_2011.csv"
 unemp <- read.csv("stateunemp2011.csv")
 seri <- read.csv("seri2011.csv")
 
@@ -56,7 +56,5 @@ firearm_seri <- firearm_seri + theme(legend.position="none")
 
 firearm_unemp <- firearm_unemp + theme(legend.position="none")
 
-png(filename="firearm_seri.png", width=800, height=600)
-print(plotObject)
-dev.off()
+
                  
