@@ -1,21 +1,24 @@
+#Sources: 2011 unemployment http://www.bls.gov/opub/ted/2012/ted_20120313.htm
+#2011 gun crime: https://docs.google.com/spreadsheet/ccc?key=0AonYZs4MzlZbdGhycDRPQlN1dTBoMzJWOTk0Uk9DRVE#gid=10
+#2011 SERI ranking: http://www.aps.org/units/fed/newsletters/summer2011/white-cottle.cfm
+
 #Step 1: load & process data
 
 #load & store data
-data <- read.csv("guncrime_2011.csv", header=T)
-unemp <- read.csv("stateunemp2011.csv", header=T)
-seri <- read.csv("seri2011.csv", header=T)
+data <- read.csv("guncrime_2011.csv"_
+unemp <- read.csv("stateunemp2011.csv")
+seri <- read.csv("seri2011.csv")
 
-#resort seri to be alphabetically ordered
-attach(seri)
-seri <- seri[order(State),]
-
+#resort seri to be alphabetically ordered (because other two datasets are alphabetically ordered)
+seri <- seri[order(seri$State),]
+                 
 #drop third column of unemp
-unemp1 <- unemp[,c("State", "Unemployment.rate")]
+unemp <- unemp[,c("State", "Unemployment.rate")]
 
-#merge unemp1 and seri1
+#merge unemp and seri
 whycrime <- merge(seri, unemp)
 
-#drop last 4 rows of data
+#drop last 4 rows of data because not available on other two datasets
 data <- head(data, -4L)
 
 #rename column 4 to "firearm_deaths"
@@ -34,8 +37,7 @@ data <- data[c(-8),]
 whycrime1 <- merge(whycrime, data)
 
 #transform firearm_deaths from factor to numeric
-whycrime1 <- transform(whycrime1, firearm_deaths = as.numeric(firearm_deaths))
-
+whycrime1 <- transform(whycrime1, firearm_deaths = as.numeric(gsub(",","",firearm_deaths)))
 
 #Part 2: Visualize data
 
@@ -54,4 +56,7 @@ firearm_seri <- firearm_seri + theme(legend.position="none")
 
 firearm_unemp <- firearm_unemp + theme(legend.position="none")
 
- 
+png(filename="firearm_seri.png", width=800, height=600)
+print(plotObject)
+dev.off()
+                 
